@@ -1,5 +1,5 @@
 import React from "react";
-import Screens from "./components/Screens";
+import Screens from "./components/Screens/Screens";
 import { Container } from "react-bootstrap";
 import "./styles.css";
 

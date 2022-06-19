@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { Row, Col, Card, ListGroup, Button } from "react-bootstrap";
+import BattleMessage from "./BattleMessage";
+import ResetBtn from "../ResetBtn";
+import { Row, Col, Card, ListGroup } from "react-bootstrap";
+import refreshPage from "../../../shared/refreshPage";
 
 export default function VsScreen({ player1, player2 }) {
   /* 
@@ -7,7 +10,7 @@ export default function VsScreen({ player1, player2 }) {
 # State Management #
 #################### 
 */
-  const [message, setMessage] = useState("Battle Message Goes Here");
+  const [message, setMessage] = useState("Start Match!");
   const [playerTurn, setPlayerTurn] = useState(
     Math.floor(Math.random() * 2) + 1
   );
@@ -21,6 +24,11 @@ export default function VsScreen({ player1, player2 }) {
 ####################### 
 */
 
+  /* 
+######################
+# Player Turn Change #
+###################### 
+*/
   const handlePlayerTurnChange = () => {
     if (playerTurn === 1) {
       return <p className="p1-turn m-0">P1</p>;
@@ -31,6 +39,11 @@ export default function VsScreen({ player1, player2 }) {
     }
   };
 
+  /* 
+########################
+# Handle Ability Click #
+######################## 
+*/
   const handleAbilityClick = (e, index) => {
     const damageDone = Math.floor(Math.random() * 26);
 
@@ -69,17 +82,22 @@ export default function VsScreen({ player1, player2 }) {
     /* Gameover Logic */
     if (player1.health <= 0 || player2.health <= 0) {
       if (player1.health <= 0) {
-        setMessage("Player 1 Lost!");
+        setMessage("Player 2 Won!");
         setWinner("player2");
       }
       if (player2.health <= 0) {
-        setMessage("Player 2 Lost!");
+        setMessage("Player 1 Won!");
         setWinner("player1");
       }
       setGameOver(true);
     }
   };
 
+  /* 
+################
+# Reset Battle #
+################ 
+*/
   const resetBattle = () => {
     player1.health = 100;
     player2.health = 100;
@@ -89,10 +107,11 @@ export default function VsScreen({ player1, player2 }) {
     setWinner("");
   };
 
-  const refreshPage = () => {
-    window.location.reload();
-  };
-
+  /* 
+####################
+# Defeated Overlay #
+####################
+*/
   const defeatedOverlay = (
     <div className="card-overlay d-flex justify-content-center align-items-center">
       <p>Defeated</p>
@@ -110,7 +129,11 @@ export default function VsScreen({ player1, player2 }) {
         className="flex-column flex-lg-row d-flex justify-content-center align-items-center"
         style={{ width: "100%", maxWidth: "900px" }}
       >
-        {/* Player 1 */}
+        {/* 
+############
+# Player 1 #
+############
+*/}
         <Col className="d-flex justify-content-center align-items-center">
           <Card
             className={`vs-card bg-dark text-center m-2 shadow ${
@@ -189,7 +212,11 @@ export default function VsScreen({ player1, player2 }) {
           </div>
         </Col>
 
-        {/* Player 2 */}
+        {/* 
+############
+# Player 2 #
+############
+*/}
         <Col className="d-flex justify-content-center align-items-center">
           <Card
             className={`vs-card bg-dark text-center m-2 shadow ${
@@ -255,49 +282,27 @@ export default function VsScreen({ player1, player2 }) {
           </Card>
         </Col>
       </Row>
-      {/* Battle Message Section */}
+      {/* 
+##########################
+# Battle Message Section #
+##########################
+*/}
       <BattleMessage
         message={message}
         gameOver={gameOver}
         resetBattle={resetBattle}
         refreshPage={refreshPage}
       />
+      {/* 
+#####################
+# Reset Game Button #
+#####################
+*/}
+      <Row className="my-3">
+        <Col>
+          <ResetBtn />
+        </Col>
+      </Row>
     </>
-  );
-}
-
-/* 
-############################
-# Battle Message Component #
-############################ 
-*/
-
-function BattleMessage({ message, gameOver, resetBattle, refreshPage }) {
-  return (
-    <Row
-      className="d-flex  align-items-center bg-dark text-light shadow rounded mt-4"
-      style={{ width: "100%", maxWidth: "700px" }}
-    >
-      <Col
-        className="d-flex flex-column justify-content-center align-items-center rounded m-2"
-        style={{ height: "200px", border: "solid white 3px" }}
-      >
-        <p className={gameOver ? "mb-4 text-center" : "m-0 text-center"}>
-          {message}
-        </p>
-        {/* Buttons Are Only Visible If gameOver Is True  */}
-        <div className={gameOver ? "" : "d-none"}>
-          <Button
-            className="bg-success border-0 rounded me-2"
-            onClick={resetBattle}
-          >
-            Rematch
-          </Button>
-          <Button className="bg-danger border-0 rounded" onClick={refreshPage}>
-            Choose Again
-          </Button>
-        </div>
-      </Col>
-    </Row>
   );
 }

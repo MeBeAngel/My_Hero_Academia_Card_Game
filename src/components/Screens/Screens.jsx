@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import CharacterSelectionScreen from "./CharacterSelectScreen";
-import VsScreens from "./VsScreen";
+import CharacterSelectionScreen from "./CharacterSelectScreen/CharacterSelectScreen";
+import VsScreens from "./VsScreen/VsScreen";
 
 export default function Screens() {
   /* 
