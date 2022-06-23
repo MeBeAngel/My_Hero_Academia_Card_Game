@@ -51,11 +51,11 @@ html {
   padding: 10px;
 }
 .player1-select-title {
-  color: green;
+  color: #198754;
 }
 
 .player2-select-title {
-  color: red;
+  color: #dc3545;
   transition: color 2s;
 }
 
@@ -77,12 +77,12 @@ html {
 }
 
 .p1-turn {
-  color: green;
+  color: #198754;
   transition: color 2s;
 }
 
 .p2-turn {
-  color: red;
+  color: #dc3545;
   transition: color 2s;
 }
 
@@ -101,7 +101,7 @@ html {
 
 .card-overlay p {
   font-size: 60px;
-  color: red;
+  color: #dc3545;
   font-weight: bold;
   transform: rotate(-61deg);
 }
@@ -110,4 +110,14 @@ html {
   font-weight: bold;
   border: 2px solid black;
   border-radius: 6px;
+}
+
+.make-arrow-turn-p1 {
+  transform: rotate(180deg);
+  transition: all 1s ease-in-out;
+}
+
+.make-arrow-turn-p2 {
+  color: #dc3545;
+  transition: all 1s ease-in-out;
 }

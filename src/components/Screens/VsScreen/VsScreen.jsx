@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import BattleMessage from "./BattleMessage";
 import ResetBtn from "../ResetBtn";
+import arrow from "../../../assets/arrow.svg";
+import ArrowSvg from "./ArrowSvg";
 import { Row, Col, Card, ListGroup } from "react-bootstrap";
 import refreshPage from "../../../shared/refreshPage";
 
@@ -45,48 +47,123 @@ export default function VsScreen({ player1, player2 }) {
 ######################## 
 */
   const handleAbilityClick = (e, index) => {
-    const damageDone = Math.floor(Math.random() * 26);
+    const lowDamageDone = Math.floor(Math.random() * 6);
+    const medDamageDone = Math.floor(Math.random() * 11);
+    const heavyDamageDone = Math.floor(Math.random() * 11);
 
     /* Player 1 Logic */
     if (playerTurn === 1 && e.target.name === "player1" && player1.health > 0) {
-      if (damageDone === 0) {
+      if (lowDamageDone === 0 || medDamageDone === 0 || heavyDamageDone === 0) {
         setMessage(player1.useAbility(index, `but it missed`));
         setPlayerTurn(2);
-      } else {
-        setMessage(
-          player1.useAbility(index, `${player2.name} was hit for ${damageDone}`)
-        );
-        setPlayerTurn(2);
-        player2.health = player2.health - damageDone;
-        console.log(e.target);
       }
+
+      if (index === 0 && lowDamageDone !== 0) {
+        setMessage(
+          player1.useAbility(
+            index,
+            `${player2.name} was hit for ${lowDamageDone}`
+          )
+        );
+        player1.stamina = player1.stamina - 5;
+        player2.health = player2.health - lowDamageDone;
+        setPlayerTurn(2);
+      }
+
+      if (index === 1 && medDamageDone !== 0) {
+        setMessage(
+          player1.useAbility(
+            index,
+            `${player2.name} was hit for ${medDamageDone + 5}`
+          )
+        );
+        player1.stamina = player1.stamina - 15;
+        player2.health = player2.health - (medDamageDone + 5);
+        setPlayerTurn(2);
+      }
+
+      if (index === 2 && heavyDamageDone !== 0) {
+        setMessage(
+          player1.useAbility(
+            index,
+            `${player2.name} was hit for ${heavyDamageDone + 15}`
+          )
+        );
+        player1.stamina = player1.stamina - 25;
+        player2.health = player2.health - (heavyDamageDone + 15);
+        setPlayerTurn(2);
+      }
+
       setCardZoom({ player1: true, player2: false });
     }
 
     /* Player 2 Logic */
     if (playerTurn === 2 && e.target.name === "player2" && player2.health > 0) {
-      if (damageDone === 0) {
+      if (lowDamageDone === 0 || medDamageDone === 0 || heavyDamageDone === 0) {
         setMessage(player2.useAbility(index, `but it missed`));
         setPlayerTurn(1);
-      } else {
-        setMessage(
-          player2.useAbility(index, `${player1.name} was hit for ${damageDone}`)
-        );
-        setPlayerTurn(1);
-        player1.health = player1.health - damageDone;
-        console.log(e.target);
       }
+
+      if (index === 0 && lowDamageDone !== 0) {
+        setMessage(
+          player2.useAbility(
+            index,
+            `${player1.name} was hit for ${lowDamageDone}`
+          )
+        );
+        player2.stamina = player2.stamina - 5;
+        player1.health = player1.health - lowDamageDone;
+        setPlayerTurn(1);
+      }
+
+      if (index === 1 && medDamageDone !== 0) {
+        setMessage(
+          player2.useAbility(
+            index,
+            `${player1.name} was hit for ${medDamageDone + 5}`
+          )
+        );
+        player2.stamina = player2.stamina - 15;
+        player1.health = player1.health - medDamageDone + 5;
+        setPlayerTurn(1);
+      }
+
+      if (index === 2 && heavyDamageDone !== 0) {
+        setMessage(
+          player2.useAbility(
+            index,
+            `${player1.name} was hit for ${heavyDamageDone + 15}`
+          )
+        );
+        player2.stamina = player2.stamina - 25;
+        player1.health = player1.health - (heavyDamageDone + 15);
+        setPlayerTurn(1);
+      }
+
       setCardZoom({ player1: false, player2: true });
     }
 
     /* Gameover Logic */
-    if (player1.health <= 0 || player2.health <= 0) {
-      if (player1.health <= 0) {
-        setMessage("Player 2 Won!");
+    if (
+      player1.health <= 0 ||
+      player2.health <= 0 ||
+      player1.stamina <= 0 ||
+      player2.stamina <= 0
+    ) {
+      if (player1.health <= 0 || player1.stamina <= 0) {
+        setMessage(`${player2.name} Won!`);
+        setWinner("player2");
+      }
+      if (player1.stamina <= 0) {
+        setMessage(`${player1.name} ran out of stamina! ${player2.name} Won!`);
         setWinner("player2");
       }
       if (player2.health <= 0) {
-        setMessage("Player 1 Won!");
+        setMessage(`${player1.name} Won!`);
+        setWinner("player1");
+      }
+      if (player2.stamina <= 0) {
+        setMessage(`${player2.name} ran out of stamina! ${player1.name} Won!`);
         setWinner("player1");
       }
       setGameOver(true);
@@ -101,6 +178,8 @@ export default function VsScreen({ player1, player2 }) {
   const resetBattle = () => {
     player1.health = 100;
     player2.health = 100;
+    player1.stamina = 100;
+    player2.stamina = 100;
     setGameOver(false);
     setMessage("Battle Message Goes Here");
     setPlayerTurn(Math.floor(Math.random() * 2) + 1);
@@ -209,6 +288,12 @@ export default function VsScreen({ player1, player2 }) {
               Turn
             </p>
             {handlePlayerTurnChange()}
+            <ArrowSvg
+              className={
+                playerTurn === 1 ? "make-arrow-turn-p1" : "make-arrow-turn-p2"
+              }
+              fill={playerTurn === 1 ? "#198754" : "#dc3545"}
+            />
           </div>
         </Col>
 

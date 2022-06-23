@@ -45,14 +45,6 @@ export default function CharacterSelectScreen({
     if (player1 && player2) {
       return (
         <>
-          <Col className="d-flex flex-column flex-lg-row justify-content-around align-items-center">
-            <img
-              src={player1.img}
-              alt={player1.name}
-              style={{ width: "60px" }}
-            />
-            <h5 className="m-0 text-success">{player1.name.toUpperCase()}</h5>
-          </Col>
           <Col className="d-flex d-lg-block flex-column justify-content-center align-items-center col-lg-5 text-center p-3 rounded">
             <Button
               className="bg-success border-0 mb-3 mb-lg-0 me-lg-3"
@@ -69,17 +61,28 @@ export default function CharacterSelectScreen({
               Choose Again
             </Button>
           </Col>
-          <Col className="d-flex flex-column flex-lg-row justify-content-around align-items-center">
-            <h5 className="m-0 text-danger order-last order-lg-first">
-              {player2.name.toUpperCase()}
-            </h5>
-            <img
-              src={player2.img}
-              alt={player2.name}
-              style={{ width: "60px" }}
-            />
-          </Col>
         </>
+      );
+    }
+  };
+
+  const handleSelectedPlayer = (player) => {
+    if (player === player1) {
+      return (
+        <Col className="d-flex flex-column flex-lg-row justify-content-around align-items-center">
+          <img src={player.img} alt={player.name} style={{ width: "60px" }} />
+          <h5 className="m-0 text-success">{player.name}</h5>
+        </Col>
+      );
+    }
+    if (player === player2) {
+      return (
+        <Col className="d-flex flex-column flex-lg-row justify-content-around align-items-center">
+          <h5 className="m-0 text-danger order-last order-lg-first">
+            {player.name}
+          </h5>
+          <img src={player.img} alt={player.name} style={{ width: "60px" }} />
+        </Col>
       );
     }
   };
@@ -97,7 +100,9 @@ export default function CharacterSelectScreen({
         className="d-flex justify-content-center align-items-center w-100 mb-3 bg-dark shadow rounded"
         style={{ maxWidth: "1100px" }}
       >
+        {handleSelectedPlayer(player1)}
         {handleTitleChange()}
+        {handleSelectedPlayer(player2)}
       </Row>
       {/* Character Gallery Section */}
       <Row
