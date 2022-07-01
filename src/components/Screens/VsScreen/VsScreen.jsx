@@ -196,12 +196,12 @@ export default function VsScreen({ player1, player2 }) {
     setP1({
       ...p1,
       health: 100,
-      stamina: 100
+      stamina: 150
     });
     setP2({
       ...p2,
       health: 100,
-      stamina: 100
+      stamina: 150
     });
     setGameOver(false);
     setMessage("Battle Message Goes Here");

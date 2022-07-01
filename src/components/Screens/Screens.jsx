@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { Row, Col, Form } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Row, Col, Form, Modal, Button } from "react-bootstrap";
 import CharacterSelectionScreen from "./CharacterSelectScreen/CharacterSelectScreen";
 import VsScreens from "./VsScreen/VsScreen";
-import Audio from "../../assets/audio/Symbol_of_Peace.MP3";
+import mainAudio from "../../assets/audio/Symbol_of_Peace.MP3";
+import battleAudio from "../../assets/audio/battleAudio.mp3";
 
 export default function Screens() {
   /* 
@@ -27,6 +28,24 @@ export default function Screens() {
 
   const [audioToggle, setAudioToggle] = useState(false);
 
+  const [show, setShow] = useState(true);
+
+  useEffect(() => {
+    const mainAudio = document.getElementById("mainAudio");
+    const battleAudio = document.getElementById("battleAudio");
+
+    if (audioToggle && !fightWasClicked) {
+      mainAudio.play();
+      battleAudio.pause();
+      battleAudio.currentTime = 0;
+    }
+    if (audioToggle && fightWasClicked) {
+      battleAudio.play();
+      mainAudio.pause();
+      mainAudio.currentTime = 0;
+    }
+  }, [audioToggle, fightWasClicked]);
+
   /* 
 #######################
 # Methods / Functions #
@@ -44,20 +63,41 @@ export default function Screens() {
   const handleAudio = () => {
     if (audioToggle) {
       return (
-        <audio loop autoPlay>
-          <source src={Audio} type="audio/mpeg" />
-          Audio tag is not supported in this browser.
-        </audio>
+        <>
+          {/* Main Audio */}
+          <audio id="mainAudio" loop autoPlay>
+            <source src={mainAudio} type="audio/mpeg" />
+            Audio tag is not supported in this browser.
+          </audio>
+          {/* Battle Audio */}
+          <audio id="battleAudio" loop autoPlay>
+            <source src={battleAudio} type="audio/mpeg" />
+            Audio tag is not supported in this browser.
+          </audio>
+        </>
       );
     } else {
       return (
-        <audio muted loop autoPlay>
-          <source src={Audio} type="audio/mpeg" />
-          Audio tag is not supported in this browser.
-        </audio>
+        <>
+          {/* Main Audio */}
+          <audio id="mainAudio" preload loop muted>
+            <source
+              src={fightWasClicked ? battleAudio : mainAudio}
+              type="audio/mpeg"
+            />
+            Audio tag is not supported in this browser.
+          </audio>
+          {/* Battle Audio */}
+          <audio id="battleAudio" preload loop muted>
+            <source src={battleAudio} type="audio/mpeg" />
+            Audio tag is not supported in this browser.
+          </audio>
+        </>
       );
     }
   };
+
+  const toggleModal = () => setShow(!show);
 
   /* 
 ###############
@@ -66,6 +106,27 @@ export default function Screens() {
 */
   return (
     <>
+      <Modal
+        contentClassName="bg-warning rounded shadow border-3 border-primary"
+        show={show}
+        onHide={toggleModal}
+        backdrop="static"
+        centered
+        style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+      >
+        <Modal.Header className="border-0">
+          <Modal.Title>Gameplay Tip!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h5>This game is much more fun with sound.</h5>{" "}
+          <h5>Don't forget to turn it on!</h5>
+        </Modal.Body>
+        <Modal.Footer className="border-0">
+          <Button variant="primary" onClick={toggleModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
       {/* Audio Section */}
       <Row className="bg-warning ms-1 me-auto p-2 rounded shadow">
         <Col>

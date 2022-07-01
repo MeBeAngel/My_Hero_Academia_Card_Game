@@ -31,7 +31,7 @@ class Character {
 
 /* Heroes */
 
-const deku = new Character(0, dekuPortrait, "Deku", "One For All", 100, 100, [
+const deku = new Character(0, dekuPortrait, "Deku", "One For All", 100, 150, [
   "Detroit Smash",
   "Delaware Smash",
   "Shoot Style"
@@ -43,7 +43,7 @@ const bakugo = new Character(
   "Bakugo",
   "Explosion",
   100,
-  100,
+  150,
   ["Stun Grenade", "Howitzer Impact", "AP Shot"]
 );
 
@@ -53,11 +53,11 @@ const todoroki = new Character(
   "Todoroki",
   "Cold & Hot",
   100,
-  100,
+  150,
   ["Heaven-Piercing Ice Wall", "Flashfreeze Heatwave", "Flashfire Fist"]
 );
 
-const pinky = new Character(3, pinkyPortrait, "Pinky", "Acid", 100, 100, [
+const pinky = new Character(3, pinkyPortrait, "Pinky", "Acid", 100, 150, [
   "Acid Veil",
   "Acid Shot",
   "Acid Layback"
@@ -69,7 +69,7 @@ const nejireHado = new Character(
   "Nejire Hado",
   "Wave Motion",
   100,
-  100,
+  150,
   ["Nejire Wave", "Nejire Flood", "Wave Boost"]
 );
 
@@ -79,25 +79,25 @@ const lemillion = new Character(
   "Lemillion",
   "Permeation",
   100,
-  100,
+  150,
   ["Permeation", "Blinder Touch Eyeball Crush", "Phantom Menace"]
 );
 
 /* Villains */
 
-const twice = new Character(6, twicePortrait, "Twice", "Double", 100, 100, [
+const twice = new Character(6, twicePortrait, "Twice", "Double", 100, 150, [
   "Sad Man's Parade",
   "Knife Stab",
   "measuring Tape"
 ]);
 
-const toga = new Character(7, togaPortrait, "Toga", "Transform", 100, 100, [
+const toga = new Character(7, togaPortrait, "Toga", "Transform", 100, 150, [
   "Blood Suck",
   "Knife Stab",
   "Knife Throw"
 ]);
 
-const dabi = new Character(8, dabiPortrait, "Dabi", "Blue Flame", 100, 100, [
+const dabi = new Character(8, dabiPortrait, "Dabi", "Blue Flame", 100, 150, [
   "Prominence Burn",
   "Jet Burn",
   "Hell Spider"
@@ -109,7 +109,7 @@ const mrCompress = new Character(
   "Mr. Compress",
   "Compress",
   100,
-  100,
+  150,
   ["Compress Target", "marble decompression", "Swing Walking Stick"]
 );
 
@@ -119,7 +119,7 @@ const kurogiri = new Character(
   "Kurogiri",
   "Warp Gate",
   100,
-  100,
+  150,
   ["Dark Fog", "Warp Attack", "Warp Drop"]
 );
 
@@ -129,7 +129,7 @@ const shigaraki = new Character(
   "Tomura Shigaraki",
   "Decay",
   100,
-  100,
+  150,
   ["Decay Touch", "Air Cannon", "Rivet Stab"]
 );
 
