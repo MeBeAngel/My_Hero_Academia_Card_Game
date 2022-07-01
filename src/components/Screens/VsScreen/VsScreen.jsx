@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import BattleMessage from "./BattleMessage";
 import ResetBtn from "../ResetBtn";
-import arrow from "../../../assets/arrow.svg";
 import ArrowSvg from "./ArrowSvg";
 import { Row, Col, Card, ListGroup } from "react-bootstrap";
 import refreshPage from "../../../shared/refreshPage";
@@ -12,6 +11,24 @@ export default function VsScreen({ player1, player2 }) {
 # State Management #
 #################### 
 */
+  const [p1, setP1] = useState({
+    id: player1.id,
+    img: player1.img,
+    name: player1.name,
+    quirk: player1.quirk,
+    health: player1.health,
+    stamina: player1.stamina,
+    abilities: player1.abilities
+  });
+  const [p2, setP2] = useState({
+    id: player2.id,
+    img: player2.img,
+    name: player2.name,
+    quirk: player2.quirk,
+    health: player2.health,
+    stamina: player2.stamina,
+    abilities: player2.abilities
+  });
   const [message, setMessage] = useState("Start Match!");
   const [playerTurn, setPlayerTurn] = useState(
     Math.floor(Math.random() * 2) + 1
@@ -19,6 +36,34 @@ export default function VsScreen({ player1, player2 }) {
   const [gameOver, setGameOver] = useState(false);
   const [winner, setWinner] = useState();
   const [cardZoom, setCardZoom] = useState({ player1: false, player2: false });
+
+  /* Gameover Logic */
+  useEffect(() => {
+    if (
+      p1.health <= 0 ||
+      p2.health <= 0 ||
+      p1.stamina <= 0 ||
+      p2.stamina <= 0
+    ) {
+      if (p1.health <= 0) {
+        setMessage(`${p2.name} Won!`);
+        setWinner("player2");
+      }
+      if (p1.stamina <= 0) {
+        setMessage(`${p1.name} ran out of stamina! ${p2.name} Won!`);
+        setWinner("player2");
+      }
+      if (p2.health <= 0) {
+        setMessage(`${p1.name} Won!`);
+        setWinner("player1");
+      }
+      if (p2.stamina <= 0) {
+        setMessage(`${p2.name} ran out of stamina! ${p1.name} Won!`);
+        setWinner("player1");
+      }
+      setGameOver(true);
+    }
+  }, [p1, p2]);
 
   /* 
 #######################
@@ -52,7 +97,7 @@ export default function VsScreen({ player1, player2 }) {
     const heavyDamageDone = Math.floor(Math.random() * 11);
 
     /* Player 1 Logic */
-    if (playerTurn === 1 && e.target.name === "player1" && player1.health > 0) {
+    if (playerTurn === 1 && e.target.name === "player1" && p1.health > 0) {
       if (lowDamageDone === 0 || medDamageDone === 0 || heavyDamageDone === 0) {
         setMessage(player1.useAbility(index, `but it missed`));
         setPlayerTurn(2);
@@ -60,13 +105,12 @@ export default function VsScreen({ player1, player2 }) {
 
       if (index === 0 && lowDamageDone !== 0) {
         setMessage(
-          player1.useAbility(
-            index,
-            `${player2.name} was hit for ${lowDamageDone}`
-          )
+          player1.useAbility(index, `${p2.name} was hit for ${lowDamageDone}`)
         );
-        player1.stamina = player1.stamina - 5;
-        player2.health = player2.health - lowDamageDone;
+        let subtractStamina = p1.stamina - 5;
+        setP1({ ...p1, stamina: subtractStamina });
+        let subtractHealth = p2.health - lowDamageDone;
+        setP2({ ...p2, health: subtractHealth });
         setPlayerTurn(2);
       }
 
@@ -74,11 +118,11 @@ export default function VsScreen({ player1, player2 }) {
         setMessage(
           player1.useAbility(
             index,
-            `${player2.name} was hit for ${medDamageDone + 5}`
+            `${p2.name} was hit for ${medDamageDone + 5}`
           )
         );
-        player1.stamina = player1.stamina - 15;
-        player2.health = player2.health - (medDamageDone + 5);
+        setP1({ ...p1, stamina: p1.stamina - 15 });
+        setP2({ ...p2, health: p2.health - (medDamageDone + 5) });
         setPlayerTurn(2);
       }
 
@@ -86,11 +130,11 @@ export default function VsScreen({ player1, player2 }) {
         setMessage(
           player1.useAbility(
             index,
-            `${player2.name} was hit for ${heavyDamageDone + 15}`
+            `${p2.name} was hit for ${heavyDamageDone + 15}`
           )
         );
-        player1.stamina = player1.stamina - 25;
-        player2.health = player2.health - (heavyDamageDone + 15);
+        setP1({ ...p1, stamina: p1.stamina - 25 });
+        setP2({ ...p2, health: p2.health - (heavyDamageDone + 15) });
         setPlayerTurn(2);
       }
 
@@ -98,7 +142,7 @@ export default function VsScreen({ player1, player2 }) {
     }
 
     /* Player 2 Logic */
-    if (playerTurn === 2 && e.target.name === "player2" && player2.health > 0) {
+    if (playerTurn === 2 && e.target.name === "player2" && p2.health > 0) {
       if (lowDamageDone === 0 || medDamageDone === 0 || heavyDamageDone === 0) {
         setMessage(player2.useAbility(index, `but it missed`));
         setPlayerTurn(1);
@@ -106,13 +150,12 @@ export default function VsScreen({ player1, player2 }) {
 
       if (index === 0 && lowDamageDone !== 0) {
         setMessage(
-          player2.useAbility(
-            index,
-            `${player1.name} was hit for ${lowDamageDone}`
-          )
+          player2.useAbility(index, `${p1.name} was hit for ${lowDamageDone}`)
         );
-        player2.stamina = player2.stamina - 5;
-        player1.health = player1.health - lowDamageDone;
+        let subtractStamina = p2.stamina - 5;
+        setP2({ ...p2, stamina: subtractStamina });
+        let subtractHealth = p1.health - lowDamageDone;
+        setP1({ ...p1, health: subtractHealth });
         setPlayerTurn(1);
       }
 
@@ -120,11 +163,11 @@ export default function VsScreen({ player1, player2 }) {
         setMessage(
           player2.useAbility(
             index,
-            `${player1.name} was hit for ${medDamageDone + 5}`
+            `${p1.name} was hit for ${medDamageDone + 5}`
           )
         );
-        player2.stamina = player2.stamina - 15;
-        player1.health = player1.health - medDamageDone + 5;
+        setP2({ ...p2, stamina: p2.stamina - 15 });
+        setP1({ ...p1, health: p1.health - (medDamageDone + 5) });
         setPlayerTurn(1);
       }
 
@@ -132,41 +175,15 @@ export default function VsScreen({ player1, player2 }) {
         setMessage(
           player2.useAbility(
             index,
-            `${player1.name} was hit for ${heavyDamageDone + 15}`
+            `${p1.name} was hit for ${heavyDamageDone + 15}`
           )
         );
-        player2.stamina = player2.stamina - 25;
-        player1.health = player1.health - (heavyDamageDone + 15);
+        setP2({ ...p2, stamina: p2.stamina - 25 });
+        setP1({ ...p1, health: p1.health - (heavyDamageDone + 15) });
         setPlayerTurn(1);
       }
 
       setCardZoom({ player1: false, player2: true });
-    }
-
-    /* Gameover Logic */
-    if (
-      player1.health <= 0 ||
-      player2.health <= 0 ||
-      player1.stamina <= 0 ||
-      player2.stamina <= 0
-    ) {
-      if (player1.health <= 0 || player1.stamina <= 0) {
-        setMessage(`${player2.name} Won!`);
-        setWinner("player2");
-      }
-      if (player1.stamina <= 0) {
-        setMessage(`${player1.name} ran out of stamina! ${player2.name} Won!`);
-        setWinner("player2");
-      }
-      if (player2.health <= 0) {
-        setMessage(`${player1.name} Won!`);
-        setWinner("player1");
-      }
-      if (player2.stamina <= 0) {
-        setMessage(`${player2.name} ran out of stamina! ${player1.name} Won!`);
-        setWinner("player1");
-      }
-      setGameOver(true);
     }
   };
 
@@ -176,10 +193,16 @@ export default function VsScreen({ player1, player2 }) {
 ################ 
 */
   const resetBattle = () => {
-    player1.health = 100;
-    player2.health = 100;
-    player1.stamina = 100;
-    player2.stamina = 100;
+    setP1({
+      ...p1,
+      health: 100,
+      stamina: 100
+    });
+    setP2({
+      ...p2,
+      health: 100,
+      stamina: 100
+    });
     setGameOver(false);
     setMessage("Battle Message Goes Here");
     setPlayerTurn(Math.floor(Math.random() * 2) + 1);
@@ -223,10 +246,10 @@ export default function VsScreen({ player1, player2 }) {
               border: "solid green 7px"
             }}
           >
-            <Card.Img variant="top" src={player1.img} />
+            <Card.Img variant="top" src={p1.img} />
             <Card.Body>
               <Card.Title className="text-light">
-                <strong>{player1.name}</strong>
+                <strong>{p1.name}</strong>
               </Card.Title>
 
               <ListGroup className="mb-3">
@@ -234,21 +257,21 @@ export default function VsScreen({ player1, player2 }) {
                   <div className="bg-warning w-50">
                     <strong>Quirk:</strong>
                   </div>
-                  <div className="w-50">{player1.quirk}</div>
+                  <div className="w-50">{p1.quirk}</div>
                 </ListGroup.Item>
 
                 <ListGroup.Item className="d-flex p-0">
                   <div className="bg-warning w-50">
                     <strong>Health:</strong>
                   </div>
-                  <div className="w-50">{player1.health}</div>
+                  <div className="w-50">{p1.health}</div>
                 </ListGroup.Item>
 
                 <ListGroup.Item className="d-flex p-0">
                   <div className="bg-warning w-50">
                     <strong>Stamina:</strong>
                   </div>
-                  <div className="w-50">{player1.stamina}</div>
+                  <div className="w-50">{p1.stamina}</div>
                 </ListGroup.Item>
               </ListGroup>
 
@@ -279,22 +302,25 @@ export default function VsScreen({ player1, player2 }) {
         </Col>
 
         {/* VS text */}
+        {/* If gameOver is FALSE: show player turn message and arrow, otherwise remove it */}
         <Col className="col-2 text-center">
-          <div>
-            <p
-              className="text-dark m-0"
-              style={{ fontSize: "30px", fontWeight: "bold" }}
-            >
-              Turn
-            </p>
-            {handlePlayerTurnChange()}
-            <ArrowSvg
-              className={
-                playerTurn === 1 ? "make-arrow-turn-p1" : "make-arrow-turn-p2"
-              }
-              fill={playerTurn === 1 ? "#198754" : "#dc3545"}
-            />
-          </div>
+          {!gameOver && (
+            <div>
+              <p
+                className="text-dark m-0"
+                style={{ fontSize: "30px", fontWeight: "bold" }}
+              >
+                Turn
+              </p>
+              {handlePlayerTurnChange()}
+              <ArrowSvg
+                className={
+                  playerTurn === 1 ? "make-arrow-turn-p1" : "make-arrow-turn-p2"
+                }
+                fill={playerTurn === 1 ? "#198754" : "#dc3545"}
+              />
+            </div>
+          )}
         </Col>
 
         {/* 
@@ -312,10 +338,10 @@ export default function VsScreen({ player1, player2 }) {
               border: "solid red 7px"
             }}
           >
-            <Card.Img variant="top" src={player2.img} />
+            <Card.Img variant="top" src={p2.img} />
             <Card.Body>
               <Card.Title className="text-light">
-                <strong>{player2.name}</strong>
+                <strong>{p2.name}</strong>
               </Card.Title>
 
               <ListGroup className="mb-3">
@@ -323,21 +349,21 @@ export default function VsScreen({ player1, player2 }) {
                   <div className="bg-warning w-50">
                     <strong>Quirk:</strong>
                   </div>
-                  <div className="w-50">{player2.quirk}</div>
+                  <div className="w-50">{p2.quirk}</div>
                 </ListGroup.Item>
 
                 <ListGroup.Item className="d-flex p-0">
                   <div className="bg-warning w-50">
                     <strong>Health:</strong>
                   </div>
-                  <div className="w-50">{player2.health}</div>
+                  <div className="w-50">{p2.health}</div>
                 </ListGroup.Item>
 
                 <ListGroup.Item className="d-flex p-0">
                   <div className="bg-warning w-50">
                     <strong>Stamina:</strong>
                   </div>
-                  <div className="w-50">{player2.stamina}</div>
+                  <div className="w-50">{p2.stamina}</div>
                 </ListGroup.Item>
               </ListGroup>
 

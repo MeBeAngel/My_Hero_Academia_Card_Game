@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import CharacterCard from "../../CharacterCard";
 import { characters } from "../../../shared/characters";
 import { Row, Col, Button } from "react-bootstrap";
+import Audio from "../../../assets/audio/Symbol_of_Peace.MP3";
 
 export default function CharacterSelectScreen({
   player1,
@@ -66,24 +67,31 @@ export default function CharacterSelectScreen({
     }
   };
 
-  const handleSelectedPlayer = (player) => {
-    if (player === player1) {
+  const handleSelectedPlayer1 = () => {
+    if (player1) {
       return (
         <Col className="d-flex flex-column flex-lg-row justify-content-around align-items-center">
-          <img src={player.img} alt={player.name} style={{ width: "60px" }} />
-          <h5 className="m-0 text-success">{player.name}</h5>
+          <img src={player1.img} alt={player1.name} style={{ width: "60px" }} />
+          <h5 className="m-0 text-success">{player1.name}</h5>
         </Col>
       );
+    } else {
+      return <Col></Col>;
     }
-    if (player === player2) {
+  };
+
+  const handleSelectedPlayer2 = () => {
+    if (player2) {
       return (
         <Col className="d-flex flex-column flex-lg-row justify-content-around align-items-center">
           <h5 className="m-0 text-danger order-last order-lg-first">
-            {player.name}
+            {player2.name}
           </h5>
-          <img src={player.img} alt={player.name} style={{ width: "60px" }} />
+          <img src={player2.img} alt={player2.name} style={{ width: "60px" }} />
         </Col>
       );
+    } else {
+      return <Col></Col>;
     }
   };
 
@@ -95,14 +103,18 @@ export default function CharacterSelectScreen({
 
   return (
     <>
+      <audio loop>
+        <source src={Audio} type="audio/mpeg" />
+        Audio tag is not supported in this browser.
+      </audio>
       {/* Character Screen Title Section */}
       <Row
         className="d-flex justify-content-center align-items-center w-100 mb-3 bg-dark shadow rounded"
         style={{ maxWidth: "1100px" }}
       >
-        {handleSelectedPlayer(player1)}
+        {handleSelectedPlayer1()}
         {handleTitleChange()}
-        {handleSelectedPlayer(player2)}
+        {handleSelectedPlayer2()}
       </Row>
       {/* Character Gallery Section */}
       <Row
