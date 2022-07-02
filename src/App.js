@@ -7,7 +7,7 @@ export default function App() {
   return (
     <Container
       fluid
-      className="bg-light min-vh-100 d-flex flex-column justify-content-center align-items-center py-2"
+      className="bg-light min-vh-100 d-flex flex-column justify-content-start align-items-center py-2"
     >
       <Screens />
     </Container>

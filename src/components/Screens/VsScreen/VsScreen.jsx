@@ -226,11 +226,11 @@ export default function VsScreen({ player1, player2 }) {
 ############### 
 */
   return (
-    <>
-      <Row
-        className="flex-column flex-lg-row d-flex justify-content-center align-items-center"
-        style={{ width: "100%", maxWidth: "900px" }}
-      >
+    <Row
+      className="flex-column d-flex justify-content-center align-items-center my-auto"
+      style={{ width: "100%", maxWidth: "900px" }}
+    >
+      <Row className="flex-column flex-lg-row d-flex justify-content-center align-items-center">
         {/* 
 ############
 # Player 1 #
@@ -409,11 +409,11 @@ export default function VsScreen({ player1, player2 }) {
 # Reset Game Button #
 #####################
 */}
-      <Row className="my-3">
+      <Row className="my-3 text-center">
         <Col>
           <ResetBtn />
         </Col>
       </Row>
-    </>
+    </Row>
   );
 }

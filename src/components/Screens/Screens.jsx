@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Row, Col, Form, Modal, Button } from "react-bootstrap";
+import { Row, Col, Form, Modal, Button, Carousel } from "react-bootstrap";
 import CharacterSelectionScreen from "./CharacterSelectScreen/CharacterSelectScreen";
 import VsScreens from "./VsScreen/VsScreen";
 import mainAudio from "../../assets/audio/Symbol_of_Peace.MP3";
@@ -80,7 +80,7 @@ export default function Screens() {
       return (
         <>
           {/* Main Audio */}
-          <audio id="mainAudio" preload loop muted>
+          <audio id="mainAudio" loop muted>
             <source
               src={fightWasClicked ? battleAudio : mainAudio}
               type="audio/mpeg"
@@ -88,7 +88,7 @@ export default function Screens() {
             Audio tag is not supported in this browser.
           </audio>
           {/* Battle Audio */}
-          <audio id="battleAudio" preload loop muted>
+          <audio id="battleAudio" loop muted>
             <source src={battleAudio} type="audio/mpeg" />
             Audio tag is not supported in this browser.
           </audio>
@@ -106,6 +106,7 @@ export default function Screens() {
 */
   return (
     <>
+      {/* Modal Section */}
       <Modal
         contentClassName="bg-warning rounded shadow border-3 border-primary"
         show={show}
@@ -115,11 +116,26 @@ export default function Screens() {
         style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
       >
         <Modal.Header className="border-0">
-          <Modal.Title>Gameplay Tip!</Modal.Title>
+          <Modal.Title>
+            <h3>Welcome to My Hero Card Battle!</h3>
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <h5>This game is much more fun with sound.</h5>{" "}
-          <h5>Don't forget to turn it on!</h5>
+          <h4>Gameplay Tips!</h4>
+          <Carousel indicators={false} controls={false} interval={3000}>
+            <Carousel.Item>
+              <p className="m-0">This game is much more fun with sound.</p>
+              <p>Make sure to turn it ON!</p>
+            </Carousel.Item>
+            <Carousel.Item>
+              <p className="m-0">This is another gameplay hint</p>
+              <p>What will it be</p>
+            </Carousel.Item>
+            <Carousel.Item>
+              <p className="m-0">This is another gameplay hint</p>
+              <p>What will it be</p>
+            </Carousel.Item>
+          </Carousel>
         </Modal.Body>
         <Modal.Footer className="border-0">
           <Button variant="primary" onClick={toggleModal}>
@@ -127,6 +143,7 @@ export default function Screens() {
           </Button>
         </Modal.Footer>
       </Modal>
+      {/* End */}
       {/* Audio Section */}
       <Row className="bg-warning ms-1 me-auto p-2 rounded shadow">
         <Col>
