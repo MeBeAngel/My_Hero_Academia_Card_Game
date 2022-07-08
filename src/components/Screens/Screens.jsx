@@ -108,7 +108,7 @@ export default function Screens() {
     <>
       {/* Modal Section */}
       <Modal
-        contentClassName="bg-warning rounded shadow border-3 border-primary"
+        contentClassName="bg-warning rounded shadow border-3 border-primary text-center"
         show={show}
         onHide={toggleModal}
         backdrop="static"
@@ -117,24 +117,29 @@ export default function Screens() {
       >
         <Modal.Header className="border-0">
           <Modal.Title>
-            <h3>Welcome to My Hero Card Battle!</h3>
+            <h3>Welcome to MHA Card Battle!</h3>
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <h4>Gameplay Tips!</h4>
-          <Carousel indicators={false} controls={false} interval={3000}>
+        <Modal.Body className="bg-light">
+          <h4>Gameplay Tips and updates!</h4>
+          <Carousel
+            className="bg-light text-center p-2"
+            indicators={false}
+            controls={false}
+            interval={3000}
+          >
             <Carousel.Item>
-              <p className="m-0">This game is much more fun with sound.</p>
-              <p>Make sure to turn it ON!</p>
+              <h5 className="m-0">This game is much more fun with sound.</h5>
+              <p className="m-0">Make sure to turn it ON!</p>
             </Carousel.Item>
             <Carousel.Item>
-              <p className="m-0">This is another gameplay hint</p>
+              <h5 className="m-0">Grab a friend.</h5>
+              <p className="m-0">Computer player support coming soon!</p>
+            </Carousel.Item>
+            {/* <Carousel.Item>
+              <h5 className="m-0">This is another gameplay hint</h5>
               <p>What will it be</p>
-            </Carousel.Item>
-            <Carousel.Item>
-              <p className="m-0">This is another gameplay hint</p>
-              <p>What will it be</p>
-            </Carousel.Item>
+            </Carousel.Item> */}
           </Carousel>
         </Modal.Body>
         <Modal.Footer className="border-0">

@@ -2,6 +2,16 @@ html {
   position: relative;
 }
 
+/* General / Utility */
+
+.relative {
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
+}
+
 /* Character Card Animations */
 
 @keyframes card-wiggle {

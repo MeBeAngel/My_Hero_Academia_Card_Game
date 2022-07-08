@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import BattleMessage from "./BattleMessage";
+import HealthAndStaminaBtn from "./HealthAndStaminaBtn";
 import ResetBtn from "../ResetBtn";
 import ArrowSvg from "./ArrowSvg";
 import { Row, Col, Card, ListGroup } from "react-bootstrap";
@@ -36,8 +37,15 @@ export default function VsScreen({ player1, player2 }) {
   const [gameOver, setGameOver] = useState(false);
   const [winner, setWinner] = useState();
   const [cardZoom, setCardZoom] = useState({ player1: false, player2: false });
+  const [supportReadyP1, setSupportReadyP1] = useState(false);
+  const [supportReadyP2, setSupportReadyP2] = useState(false);
+  const [supportBtnClickedP1, setSupportBtnClickp1] = useState(false);
+  const [supportBtnClickedP2, setSupportBtnClickp2] = useState(false);
 
   /* Gameover Logic */
+  // Need to handle draw logic <<<<<<<<<<<<<<
+  // ^^^^^^^^^^^^^^
+  // ^^^^^^^^^^^^^^
   useEffect(() => {
     if (
       p1.health <= 0 ||
@@ -64,6 +72,27 @@ export default function VsScreen({ player1, player2 }) {
       setGameOver(true);
     }
   }, [p1, p2]);
+
+  // Handle support btn logic
+  useEffect(() => {
+    let percent = 50 / 100;
+    if (
+      p1.health <= percent * player1.health ||
+      p1.stamina === percent * player1.stamina
+    ) {
+      if (!supportBtnClickedP1) {
+        setSupportReadyP1(true);
+      }
+    }
+    if (
+      p2.health <= percent * player2.health ||
+      p2.stamina === percent * player2.stamina
+    ) {
+      if (!supportBtnClickedP2) {
+        setSupportReadyP2(true);
+      }
+    }
+  }, [p1, p2, player1, player2, supportBtnClickedP1, supportBtnClickedP2]);
 
   /* 
 #######################
@@ -188,6 +217,29 @@ export default function VsScreen({ player1, player2 }) {
   };
 
   /* 
+###########################################
+# Handle Health & Stamina Btn Click Logic #
+###########################################
+*/
+  const handleHealthAndStamina = (e) => {
+    console.log(e.target.name);
+    if (!supportBtnClickedP1 && e.target.name === "player1") {
+      if (e.target.id === "support_health") {
+        setP1({ ...p1, health: 1000 });
+        setSupportBtnClickp1(true);
+        setSupportReadyP1(false);
+        alert("health clicked");
+      }
+      if (e.target.id === "support_stamina") {
+        setP1({ ...p1, stamina: 1000 });
+        setSupportBtnClickp1(true);
+        setSupportReadyP1(false);
+        alert("stamina clicked");
+      }
+    }
+  };
+
+  /* 
 ################
 # Reset Battle #
 ################ 
@@ -203,6 +255,10 @@ export default function VsScreen({ player1, player2 }) {
       health: 100,
       stamina: 150
     });
+    setSupportReadyP1(false);
+    setSupportReadyP2(false);
+    setSupportBtnClickp1(false);
+    setSupportBtnClickp2(false);
     setGameOver(false);
     setMessage("Battle Message Goes Here");
     setPlayerTurn(Math.floor(Math.random() * 2) + 1);
@@ -238,7 +294,7 @@ export default function VsScreen({ player1, player2 }) {
 */}
         <Col className="d-flex justify-content-center align-items-center">
           <Card
-            className={`vs-card bg-dark text-center m-2 shadow ${
+            className={`vs-card bg-dark text-center m-2 shadow relative ${
               cardZoom.player1 ? "make-card-zoom" : ""
             }`}
             style={{
@@ -246,6 +302,16 @@ export default function VsScreen({ player1, player2 }) {
               border: "solid green 7px"
             }}
           >
+            {/* Health and Stamina Button section. 
+            Both Buttons are positioned absolutely, relative to the Card element.  */}
+            <HealthAndStaminaBtn
+              xPosition="left"
+              supportReady={supportReadyP1}
+              player="player1"
+              onClick={handleHealthAndStamina}
+            />
+            {/* End */}
+
             <Card.Img variant="top" src={p1.img} />
             <Card.Body>
               <Card.Title className="text-light">
@@ -338,6 +404,14 @@ export default function VsScreen({ player1, player2 }) {
               border: "solid red 7px"
             }}
           >
+            {/* Health and Stamina Button section. 
+            Both Buttons are positioned absolutely, relative to the Card element.  */}
+            <HealthAndStaminaBtn
+              xPosition="right"
+              supportReady={supportReadyP2}
+              player="player2"
+            />
+            {/* End */}
             <Card.Img variant="top" src={p2.img} />
             <Card.Body>
               <Card.Title className="text-light">
