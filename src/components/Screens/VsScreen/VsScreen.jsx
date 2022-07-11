@@ -331,12 +331,14 @@ export default function VsScreen({ player1, player2 }) {
           >
             {/* Health and Stamina Button section. 
             Both Buttons are positioned absolutely, relative to the Card element.  */}
-            <HealthAndStaminaBtn
-              xPosition="left"
-              supportReady={supportReadyP1}
-              player="player1"
-              onClick={handleHealthAndStamina}
-            />
+            {!gameOver && (
+              <HealthAndStaminaBtn
+                xPosition="left"
+                supportReady={supportReadyP1}
+                player="player1"
+                onClick={handleHealthAndStamina}
+              />
+            )}
             {/* End */}
 
             <Card.Img variant="top" src={p1.img} />
@@ -357,14 +359,30 @@ export default function VsScreen({ player1, player2 }) {
                   <div className="bg-warning w-50">
                     <strong>Health:</strong>
                   </div>
-                  <div className="w-50">{p1.health}</div>
+                  <div
+                    className={`w-50 ${
+                      p1.health <= (50 / 100) * player1.health
+                        ? "text-danger"
+                        : ""
+                    }`}
+                  >
+                    {p1.health}
+                  </div>
                 </ListGroup.Item>
 
                 <ListGroup.Item className="d-flex p-0">
                   <div className="bg-warning w-50">
                     <strong>Stamina:</strong>
                   </div>
-                  <div className="w-50">{p1.stamina}</div>
+                  <div
+                    className={`w-50 ${
+                      p1.stamina <= (50 / 100) * player1.stamina
+                        ? "text-danger"
+                        : ""
+                    }`}
+                  >
+                    {p1.stamina}
+                  </div>
                 </ListGroup.Item>
               </ListGroup>
 
@@ -433,12 +451,14 @@ export default function VsScreen({ player1, player2 }) {
           >
             {/* Health and Stamina Button section. 
             Both Buttons are positioned absolutely, relative to the Card element.  */}
-            <HealthAndStaminaBtn
-              xPosition="right"
-              supportReady={supportReadyP2}
-              player="player2"
-              onClick={handleHealthAndStamina}
-            />
+            {!gameOver && (
+              <HealthAndStaminaBtn
+                xPosition="right"
+                supportReady={supportReadyP2}
+                player="player2"
+                onClick={handleHealthAndStamina}
+              />
+            )}
             {/* End */}
             <Card.Img variant="top" src={p2.img} />
             <Card.Body>
@@ -458,14 +478,30 @@ export default function VsScreen({ player1, player2 }) {
                   <div className="bg-warning w-50">
                     <strong>Health:</strong>
                   </div>
-                  <div className="w-50">{p2.health}</div>
+                  <div
+                    className={`w-50 ${
+                      p2.health <= (50 / 100) * player2.health
+                        ? "text-danger"
+                        : ""
+                    }`}
+                  >
+                    {p2.health}
+                  </div>
                 </ListGroup.Item>
 
                 <ListGroup.Item className="d-flex p-0">
                   <div className="bg-warning w-50">
                     <strong>Stamina:</strong>
                   </div>
-                  <div className="w-50">{p2.stamina}</div>
+                  <div
+                    className={`w-50 ${
+                      p2.stamina <= (50 / 100) * player2.stamina
+                        ? "text-danger"
+                        : ""
+                    }`}
+                  >
+                    {p2.stamina}
+                  </div>
                 </ListGroup.Item>
               </ListGroup>
 
