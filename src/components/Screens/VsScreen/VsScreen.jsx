@@ -73,7 +73,11 @@ export default function VsScreen({ player1, player2 }) {
     }
   }, [p1, p2]);
 
-  // Handle support btn logic
+  /* 
+############################
+# Handle Support Btn Logic #
+############################
+*/
   useEffect(() => {
     let percent = 50 / 100;
     if (
@@ -222,20 +226,43 @@ export default function VsScreen({ player1, player2 }) {
 ###########################################
 */
   const handleHealthAndStamina = (e) => {
-    console.log(e.target.name);
-    if (!supportBtnClickedP1 && e.target.name === "player1") {
+    const addHealthOrStamina = Math.floor(Math.random() * 15) + 15;
+
+    // Player1 Support Btn Logic
+    if (
+      !supportBtnClickedP1 &&
+      playerTurn === 1 &&
+      e.target.name === "player1"
+    ) {
       if (e.target.id === "support_health") {
-        setP1({ ...p1, health: 1000 });
+        setP1({ ...p1, health: p1.health + addHealthOrStamina });
         setSupportBtnClickp1(true);
         setSupportReadyP1(false);
-        alert("health clicked");
       }
       if (e.target.id === "support_stamina") {
-        setP1({ ...p1, stamina: 1000 });
+        setP1({ ...p1, stamina: p1.stamina + addHealthOrStamina });
         setSupportBtnClickp1(true);
         setSupportReadyP1(false);
-        alert("stamina clicked");
       }
+      setPlayerTurn(2);
+    }
+    // Player2 Support Btn Logic
+    if (
+      !supportBtnClickedP2 &&
+      playerTurn === 2 &&
+      e.target.name === "player2"
+    ) {
+      if (e.target.id === "support_health") {
+        setP2({ ...p2, health: p2.health + addHealthOrStamina });
+        setSupportBtnClickp2(true);
+        setSupportReadyP2(false);
+      }
+      if (e.target.id === "support_stamina") {
+        setP2({ ...p2, stamina: p2.stamina + addHealthOrStamina });
+        setSupportBtnClickp2(true);
+        setSupportReadyP2(false);
+      }
+      setPlayerTurn(1);
     }
   };
 
@@ -410,6 +437,7 @@ export default function VsScreen({ player1, player2 }) {
               xPosition="right"
               supportReady={supportReadyP2}
               player="player2"
+              onClick={handleHealthAndStamina}
             />
             {/* End */}
             <Card.Img variant="top" src={p2.img} />

@@ -150,7 +150,7 @@ export default function Screens() {
       </Modal>
       {/* End */}
       {/* Audio Section */}
-      <Row className="bg-warning ms-1 me-auto p-2 rounded shadow">
+      <Row className="bg-warning ms-1 me-auto mb-2 p-2 rounded shadow">
         <Col>
           <Form>
             <Form.Check
